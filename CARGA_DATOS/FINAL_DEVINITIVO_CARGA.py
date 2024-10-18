@@ -10,10 +10,10 @@ from sqlalchemy.exc import SQLAlchemyError
 df_producto = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Dim_Producto.csv')
 df_vendor = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Dim_Vendor.csv')
 df_oc = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Dim_OC.csv')
-df_ventas = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_Ventas.csv')
-df_compras = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_Compras.csv')
-df_inv_inicio = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_InvInicioYear.csv')
-df_inv_fin_year = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_InvFinYear.csv')
+df_ventas = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_Ventas_ult.csv')
+df_compras = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_Compras_ult.csv')
+df_inv_inicio = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_InvInicioYear_ult.csv')
+df_inv_fin_year = pd.read_csv(r'C:\Users\beren\Desktop\HENRRY\G4_Inventory\archive\CSV_ULTIMOS\Fact_InvFinYear_ult.csv')
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -29,97 +29,6 @@ db_url = f"mssql+pyodbc://{user}:{password}@{hostname}/{db}?driver=ODBC+Driver+1
 engine = create_engine(db_url, echo=False)
 Session = sessionmaker(bind=engine)
 
-# Crear tablas con claves autoincrementales correctamente definidas
-create_table_sqls = [
-    '''
-    CREATE TABLE dbo.DimVendor (
-        VendorID INT PRIMARY KEY,
-        VendorNumber INT,
-        VendorName VARCHAR(255)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Dim_Producto (
-        ProductoID INT PRIMARY KEY,
-        Brand INT,
-        Description VARCHAR(255),
-        Price FLOAT,
-        Size VARCHAR(255),
-        Volume FLOAT,
-        Classification INT,
-        PurchasePrice FLOAT,
-        VendorID INT,
-        FOREIGN KEY (VendorID) REFERENCES dbo.DimVendor(VendorID)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Dim_OC (
-        OrdenCompraID INT PRIMARY KEY,
-        PONumber INT,
-        PODate DATE,
-        InvoiceDate DATE,
-        PayDate DATE,
-        Quantity FLOAT,
-        Dollars FLOAT,
-        Freight FLOAT,
-        VendorNumber INT,
-        VendorName VARCHAR(255)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Fact_Ventas (
-        VentasID INT PRIMARY KEY IDENTITY(1,1),  -- Definido como autoincremental
-        InventoryId VARCHAR(255),
-        Store VARCHAR(255),
-        SalesQuantity INT,
-        SalesDollars FLOAT,
-        SalesPrice FLOAT,
-        SalesDate DATE,
-        ExciseTax FLOAT,
-        ProductoID INT,
-        FOREIGN KEY (ProductoID) REFERENCES dbo.Dim_Producto(ProductoID)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Fact_Compras (
-        ComprasID INT PRIMARY KEY IDENTITY(1,1),  -- Definido como autoincremental
-        InventoryId VARCHAR(255),
-        Store VARCHAR(255),
-        ReceivingDate DATE,
-        Quantity FLOAT,
-        Dollars FLOAT,
-        OrdenCompraID INT,
-        ProductoID INT,
-        FOREIGN KEY (ProductoID) REFERENCES dbo.Dim_Producto(ProductoID),
-        FOREIGN KEY (OrdenCompraID) REFERENCES dbo.Dim_OC(OrdenCompraID)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Fact_InvInicio (
-        InvInicioID INT PRIMARY KEY IDENTITY(1,1),
-        InventoryId VARCHAR(255),
-        Store VARCHAR(255),
-        City VARCHAR(255),
-        onHand FLOAT,
-        startDate DATE,
-        ProductoID INT,
-        FOREIGN KEY (ProductoID) REFERENCES dbo.Dim_Producto(ProductoID)
-    );
-    ''',
-    '''
-    CREATE TABLE dbo.Fact_InvFinYear (
-        InvFinYearID INT PRIMARY KEY IDENTITY(1,1),
-        InventoryId VARCHAR(255),
-        Store VARCHAR(255),
-        City VARCHAR(255),
-        onHand FLOAT,
-        endDate DATE,
-        ProductoID INT,
-        FOREIGN KEY (ProductoID) REFERENCES dbo.Dim_Producto(ProductoID)
-    );
-    '''
-]
-
 # Función para crear tablas en la base de datos
 def crear_tablas(sql_statements):
     with Session() as session:
@@ -131,9 +40,6 @@ def crear_tablas(sql_statements):
             except SQLAlchemyError as e:
                 print(f"Error al crear la tabla: {str(e)}")
                 session.rollback()
-
-# Crear las tablas
-crear_tablas(create_table_sqls)
 
 # Función para validar y limpiar datos
 def validar_datos(df, tabla):
@@ -149,14 +55,15 @@ def validar_datos(df, tabla):
         df = df.drop_duplicates(subset=['VendorID'], keep='first')
     elif tabla == 'Dim_OC':
         df = df.drop_duplicates(subset=['OrdenCompraID'], keep='first')
-    elif tabla == 'Fact_Ventas':
-        df = df.drop_duplicates(subset=['InventoryId'], keep='first')
     elif tabla == 'Fact_Compras':
-        df = df.drop_duplicates(subset=['InventoryId'], keep='first')
+        if 'ComprasID' in df.columns:
+            df = df.drop_duplicates(subset=['ComprasID'], keep='first')  # Clave primaria correcta
     elif tabla == 'Fact_InvInicio':
-        df = df.drop_duplicates(subset=['InventoryId', 'Store', 'City', 'onHand', 'startDate', 'ProductoID'], keep='first')
+        if 'InvInicioID' in df.columns:
+            df = df.drop_duplicates(subset=['InvInicioID'], keep='first')  # Clave primaria correcta
     elif tabla == 'Fact_InvFinYear':
-        df = df.drop_duplicates(subset=['InventoryId', 'Store', 'City', 'onHand', 'endDate', 'ProductoID'], keep='first')
+        if 'InvFinYearID' in df.columns:
+            df = df.drop_duplicates(subset=['InvFinYearID'], keep='first')  # Clave primaria correcta
 
     # Cargar IDs necesarios desde la base de datos
     try:
@@ -168,15 +75,15 @@ def validar_datos(df, tabla):
     # Verificar claves foráneas
     print(f"Número de filas antes de filtrar {tabla}: {df.shape[0]}")
     if tabla == 'Fact_Ventas':
-        df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]
+        pass  # No se hace nada para 'Fact_Ventas' aquí
     elif tabla == 'Fact_Compras':
         orden_compra_ids = pd.read_sql("SELECT OrdenCompraID FROM dbo.Dim_OC", engine)
         df = df[df['OrdenCompraID'].isin(orden_compra_ids['OrdenCompraID'])]
         df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]
     elif tabla == 'Fact_InvInicio':
-        df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]  # Verificar ProductoID para Fact_InvInicio
+        df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]
     elif tabla == 'Fact_InvFinYear':
-        df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]  # Verificar ProductoID para Fact_InvFinYear
+        df = df[df['ProductoID'].isin(producto_ids['ProductoID'])]
     print(f"Número de filas después de filtrar {tabla}: {df.shape[0]}")
 
     return df
@@ -185,15 +92,19 @@ def validar_datos(df, tabla):
 def insertar_datos(df, tabla):
     df_validado = validar_datos(df, tabla)
 
+    # Definir columnas autoincrementales según la tabla
+    columnas_autoincrementales = {
+        'Fact_Ventas': ['VentasID'],
+        'Fact_Compras': ['ComprasID'],
+        'Fact_InvInicio': ['InvInicioID'],
+        'Fact_InvFinYear': ['InvFinYearID']
+    }
+
     # Elimina columnas autoincrementales solo si existen
-    if tabla == 'Fact_Ventas':
-        df_validado = df_validado.drop(columns=['VentasID'], errors='ignore')  # Evitar la columna autoincremental
-    elif tabla == 'Fact_Compras':
-        df_validado = df_validado.drop(columns=['ComprasID'], errors='ignore')  # Evitar la columna autoincremental
-    elif tabla == 'Fact_InvInicio':
-        df_validado = df_validado.drop(columns=['InvInicioID'], errors='ignore')
-    elif tabla == 'Fact_InvFinYear':
-        df_validado = df_validado.drop(columns=['InvFinYearID'], errors='ignore')
+    if tabla in columnas_autoincrementales:
+        for col in columnas_autoincrementales[tabla]:
+            if col in df_validado.columns:
+                df_validado = df_validado.drop(columns=[col])
 
     if not df_validado.empty:
         try:
