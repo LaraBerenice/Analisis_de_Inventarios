@@ -1,4 +1,0 @@
-InventoryId,Store,City,Brand,Description,Size,OnHand_beg,Price_beg,StartDate,OnHand_end,Price_end,EndDate
-10_HORNSEY_100588,10,HORNSEY,1005,Maker's Mark Combo Pack,375mL 2 Pk,18.0,34.99,2016-01-01,0.0,0.0,1900-01-01
-10_HORNSEY_108,5,HORNSEY,10058,F Coppola Dmd Ivry Cab Svgn,750mL,52.0,14.99,2016-01-01,24.0,14.99,2016-12-31
-10_HORNSEY_1006,10,HORNSEY,1006,Jim Beam Candy Cane 4/50mLs,50mL 4 Pk,1.0,3.99,2016-01-01,0.0,0.0,1900-01-01

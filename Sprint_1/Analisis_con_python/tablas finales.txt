@@ -1,0 +1,77 @@
+CREATE TABLE DimVendor (
+VendorID INT PRIMARY KEY,
+VendorName VARCHAR(250),
+VendorNumber INT
+);
+
+
+CREATE TABLE DimProducto (
+ProductoID  INT PRIMARY KEY,
+Brand INT,
+Description VARCHAR(250),
+Price DECIMAL (10,5), 
+Size  VARCHAR(250),
+Volume DECIMAL(10,5),
+Classification INT,
+PurchasePrice  DECIMAL(10,5),
+VendorID INT,
+FOREIGN KEY (VendorID) REFERENCES DimVendor (VendorID)
+);
+
+
+CREATE TABLE DimOC(
+OrdenCompraID INT PRIMARY KEY,
+InvoiceDate DATE,
+PONumber  INT,
+PODate DATE,
+PayDate DATE,
+Quantity  INT,
+Dollars  DECIMAL(10,5),
+Freight  DECIMAL(10,5),
+VendorID  INT
+);
+
+CREATE TABLE Fact_inicio_inv_inventario(
+ProductoID INT, 
+InventoryId  VARCHAR(250),
+Store INT,
+City VARCHAR(250), 
+onHand INT,
+startDate DATE,
+FOREIGN KEY (ProductoID) REFERENCES DimProducto(ProductoID)
+);
+
+
+CREATE TABLE Fact_Fin_inv_inventario(
+ProductoID INT, 
+InventoryId  VARCHAR(250),
+Store INT,
+City VARCHAR(250), 
+onHand INT,
+endDate DATE,
+FOREIGN KEY (ProductoID) REFERENCES DimProducto(ProductoID)
+);
+
+CREATE TABLE FactVentas(
+InventoryId VARCHAR(250),
+Store INT,
+SalesQuantity  DECIMAL(10,5),
+SalesDollars   DECIMAL (10,5),
+SalesPrice     DECIMAL(10,5),
+SalesDate  DATE,
+ExciseTax      DECIMAL(10,5),
+ProductoID  INT,
+FOREIGN KEY (ProductoID) REFERENCES DimProducto (ProductoID)
+);
+
+CREATE TABLE FactCompras(
+InventoryId    VARCHAR(250),
+Store    INT,
+ReceivingDate  DATE,
+Quantity  INT,
+Dollars DECIMAL(10,5),
+OrdenCompraID    INT,
+ProductoID  INT,
+FOREIGN KEY (ProductoID) REFERENCES DimProducto (ProductoID),
+FOREIGN KEY (OrdenCompraID) REFERENCES DimOC (OrdenCompraID)
+);
