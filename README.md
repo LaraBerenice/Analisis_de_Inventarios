@@ -9,7 +9,7 @@ Integrantes:
 
 ---
 
-# 🚧¡Este proyecto está  siendo actualmente reconstruido!🚧
+# 🚧 ¡Este proyecto está  siendo actualmente reconstruido! 🚧
 
 ---
 
