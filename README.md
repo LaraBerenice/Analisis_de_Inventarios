@@ -53,7 +53,7 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 
 1. **Creación de repositorio en GitHub y agregado de colaboradores.**
 2. **Análisis y preparación de la data en Python.**
-3. **Creación de Modelo Relacional en plataforma online para mantenerlo colaborativo.**
+3. **Creación de Modelo Relacional.**
 4. **Creación de la base de datos local.**
 5. **Configuración de la base de datos remota.**
 6. **Acceso remoto a la base de datos, verificación del acceso de cada uno de los integrantes.**
