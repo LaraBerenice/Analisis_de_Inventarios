@@ -42,7 +42,6 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 - SQL Server: Para almacenar la base de datos.
 - ZeroTier VPN: Para conexión remota a la base de datos en SQL Server.
 - Git y GitHub: Para control de versiones y compartir versiones del trabajo.
-- LucidChart: Para creación del Modelo Relacional.
 - ClickUp: Para gestión de tareas del proyecto y creación del Diagrama de Gantt.
 
 ## Datos usados:
