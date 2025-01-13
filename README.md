@@ -2,10 +2,10 @@
 
 Integrantes:
 
-- Ledesma Lara Berenice (Project Manager)
-- Sánchez Joaquin (Data Analyst)
-- Tica Oriana (Data Analyst)
-- Guerra Cecilia (Data Analyst)
+- *Ledesma Lara Berenice (Project Manager)*
+- *Sánchez Joaquin (Data Analyst)*
+- *Tica Oriana (Data Analyst)*
+- *Guerra Cecilia (Data Analyst)*
 
 ---
 
@@ -13,7 +13,6 @@ Integrantes:
 
 ---
 
-![Banner](https://raw.githubusercontent.com/LaraBerenice/G4_Inventory/main/IMAGENES/Brindis%20real.jpg)
 
 ## Contexto
 
