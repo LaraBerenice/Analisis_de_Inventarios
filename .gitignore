@@ -14,5 +14,13 @@ init-scripts/
 logs/
 plugins/
 .config
+superset_home/
+descripcion_tablasINICIALES.txt
+relacionesDELmodelo.sql
+superset_config.py
+NEON.txt
+dashboard.py
+airflow.db/
+
 
 

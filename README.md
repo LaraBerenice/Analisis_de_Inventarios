@@ -9,10 +9,9 @@ Integrantes:
 
 ---
 
-# 🚧 ¡Este proyecto está  siendo actualmente reconstruido! 🚧
+![](IMAGENES/Brindis%20real.jpg)
 
 ---
-
 
 ## Contexto
 
@@ -59,6 +58,8 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 8. **Optimización de la carga de datos mediante Job en SQL Agent.**
 
 ---
+
+# 🚧 ¡Este proyecto está  siendo actualmente reconstruido! 🚧
 
 ⚠️ **Las modificaciónes y actualizaciónes de este README y otras tareas están siendo realizadas por Ledesma Lara.** 📝
 
