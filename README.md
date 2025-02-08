@@ -58,7 +58,3 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 8. **Optimización de la carga de datos mediante Job en SQL Agent.**
 
 ---
-
-⚠️ **Las modificaciónes y actualizaciónes de este README y otras tareas actualmente están siendo realizadas por Ledesma Lara.** 📝
-
----
