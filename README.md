@@ -59,8 +59,6 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 
 ---
 
-# 🚧 ¡Este proyecto está  siendo actualmente reconstruido! 🚧
-
-⚠️ **Las modificaciónes y actualizaciónes de este README y otras tareas están siendo realizadas por Ledesma Lara.** 📝
+⚠️ **Las modificaciónes y actualizaciónes de este README y otras tareas actualmente están siendo realizadas por Ledesma Lara.** 📝
 
 ---
