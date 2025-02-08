@@ -56,5 +56,3 @@ Y para abordar y mejorar estas problemáticas, se proponen distintas soluciones:
 6. **Acceso remoto a la base de datos, verificación del acceso de cada uno de los integrantes.**
 7. **Carga de la base de datos y verificación de su correcto funcionamiento con queries simples.**
 8. **Optimización de la carga de datos mediante Job en SQL Agent.**
-
----
